@@ -211,11 +211,13 @@ export class Client {
       taskId: string;
       service: string;
       solution: {
-        _abck: string;
-        bm_sz: string;
+        cookies_dict: {
+          _abck: string;
+          bm_sz: string;
+          Country?: string;
+          UsrLocale?: string;
+        };
         ua: string;
-        Country?: string;
-        UsrLocale?: string;
       };
       cost: number;
       solveTime: number;
@@ -226,11 +228,13 @@ export class Client {
       taskId: data.taskId,
       service: data.service,
       solution: {
-        abck: data.solution._abck,
-        bmSz: data.solution.bm_sz,
+        cookies: {
+          abck: data.solution.cookies_dict._abck,
+          bmSz: data.solution.cookies_dict.bm_sz,
+          country: data.solution.cookies_dict.Country,
+          usrLocale: data.solution.cookies_dict.UsrLocale,
+        },
         userAgent: data.solution.ua,
-        country: data.solution.Country,
-        usrLocale: data.solution.UsrLocale,
       },
       cost: data.cost,
       solveTime: data.solveTime,
@@ -296,8 +300,8 @@ export class Client {
       solveTime: number;
     }>("POST", "/v1/solve/shape", body);
 
-    // Shape returns dynamic headers, extract ua separately
-    const { ua, ...headers } = data.solution;
+    // Shape returns dynamic headers, extract User-Agent separately
+    const { "User-Agent": userAgent, ...headers } = data.solution;
 
     return {
       success: data.success,
@@ -305,7 +309,7 @@ export class Client {
       service: data.service,
       solution: {
         headers,
-        userAgent: ua,
+        userAgent: userAgent || "",
       },
       cost: data.cost,
       solveTime: data.solveTime,
@@ -413,7 +417,12 @@ export class Client {
       success: boolean;
       taskId: string;
       service: string;
-      solution: { cf_clearance: string; ua: string };
+      solution: {
+        cookies: {
+          cf_clearance: string;
+        };
+        ua: string;
+      };
       cost: number;
       solveTime: number;
     }>("POST", "/v1/solve/cloudflare-waf", body);
@@ -423,7 +432,9 @@ export class Client {
       taskId: data.taskId,
       service: data.service,
       solution: {
-        cfClearance: data.solution.cf_clearance,
+        cookies: {
+          cfClearance: data.solution.cookies.cf_clearance,
+        },
         userAgent: data.solution.ua,
       },
       cost: data.cost,

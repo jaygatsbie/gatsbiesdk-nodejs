@@ -33,13 +33,18 @@ export interface RecaptchaV3Solution {
   userAgent: string;
 }
 
-/** Solution for Akamai challenges. */
-export interface AkamaiSolution {
+/** Cookies returned by Akamai. */
+export interface AkamaiCookies {
   abck: string;
   bmSz: string;
-  userAgent: string;
   country?: string;
   usrLocale?: string;
+}
+
+/** Solution for Akamai challenges. */
+export interface AkamaiSolution {
+  cookies: AkamaiCookies;
+  userAgent: string;
 }
 
 /** Solution for Vercel challenges. */
@@ -77,9 +82,14 @@ export interface PerimeterXSolution {
   userAgent: string;
 }
 
+/** Cookies returned by Cloudflare WAF. */
+export interface CloudflareWAFCookies {
+  cfClearance: string;
+}
+
 /** Solution for Cloudflare WAF challenges. */
 export interface CloudflareWAFSolution {
-  cfClearance: string;
+  cookies: CloudflareWAFCookies;
   userAgent: string;
 }
 
