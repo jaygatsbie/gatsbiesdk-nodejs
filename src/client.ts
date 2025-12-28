@@ -2,6 +2,10 @@ import { APIError, RequestError } from "./errors";
 import type {
   AkamaiRequest,
   AkamaiSolution,
+  CaptchaFoxRequest,
+  CaptchaFoxSolution,
+  CastleRequest,
+  CastleSolution,
   ClientOptions,
   CloudflareWAFRequest,
   CloudflareWAFSolution,
@@ -9,11 +13,19 @@ import type {
   DatadomeSliderRequest,
   DatadomeSliderSolution,
   DatadomeSolution,
+  ForterRequest,
+  ForterSolution,
+  FuncaptchaRequest,
+  FuncaptchaSolution,
   HealthResponse,
   PerimeterXRequest,
   PerimeterXSolution,
   RecaptchaV3Request,
   RecaptchaV3Solution,
+  Reese84Request,
+  Reese84Solution,
+  SBSDRequest,
+  SBSDSolution,
   ShapeRequest,
   ShapeSolution,
   SolveResponse,
@@ -470,6 +482,224 @@ export class Client {
       service: data.service,
       solution: {
         datadome: data.solution.datadome,
+        userAgent: data.solution.ua,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve a CaptchaFox challenge.
+   */
+  async solveCaptchaFox(
+    request: CaptchaFoxRequest
+  ): Promise<SolveResponse<CaptchaFoxSolution>> {
+    const body = {
+      task_type: "captchafox",
+      proxy: request.proxy,
+      target_url: request.targetUrl,
+      site_key: request.siteKey,
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { cookie: { bm_s: string; bm_sc: string }; ua: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/captchafox", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        cookie: {
+          bmS: data.solution.cookie.bm_s,
+          bmSc: data.solution.cookie.bm_sc,
+        },
+        userAgent: data.solution.ua,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve a Castle challenge.
+   */
+  async solveCastle(
+    request: CastleRequest
+  ): Promise<SolveResponse<CastleSolution>> {
+    const body = {
+      task_type: "castle",
+      proxy: request.proxy,
+      target_url: request.targetUrl,
+      config_json: {
+        avoidCookies: request.configJson.avoidCookies,
+        pk: request.configJson.pk,
+        wUrl: request.configJson.wUrl,
+        swUrl: request.configJson.swUrl,
+      },
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { token: string; ua: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/castle", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        token: data.solution.token,
+        userAgent: data.solution.ua,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve an Incapsula Reese84 challenge.
+   */
+  async solveReese84(
+    request: Reese84Request
+  ): Promise<SolveResponse<Reese84Solution>> {
+    const body = {
+      task_type: "reese84",
+      proxy: request.proxy,
+      reese84_js_url: request.reese84JsUrl,
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { reese84: string; user_agent: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/reese84", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        reese84: data.solution.reese84,
+        userAgent: data.solution.user_agent,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve a Forter challenge.
+   */
+  async solveForter(
+    request: ForterRequest
+  ): Promise<SolveResponse<ForterSolution>> {
+    const body = {
+      task_type: "forter",
+      proxy: request.proxy,
+      target_url: request.targetUrl,
+      forter_js_url: request.forterJsUrl,
+      site_id: request.siteId,
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { token: string; ua: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/forter", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        token: data.solution.token,
+        userAgent: data.solution.ua,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve a Funcaptcha (Arkose Labs) challenge.
+   */
+  async solveFuncaptcha(
+    request: FuncaptchaRequest
+  ): Promise<SolveResponse<FuncaptchaSolution>> {
+    const body = {
+      task_type: "funcaptcha",
+      proxy: request.proxy,
+      target_url: request.targetUrl,
+      custom_api_host: request.customApiHost,
+      public_key: request.publicKey,
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { token: string; ua: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/funcaptcha", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        token: data.solution.token,
+        userAgent: data.solution.ua,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve an Akamai SBSD challenge.
+   */
+  async solveSBSD(request: SBSDRequest): Promise<SolveResponse<SBSDSolution>> {
+    const body = {
+      task_type: "sbsd",
+      proxy: request.proxy,
+      target_url: request.targetUrl,
+      target_method: request.targetMethod,
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { bm_s: string; bm_sc: string; ua: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/sbsd", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        bmS: data.solution.bm_s,
+        bmSc: data.solution.bm_sc,
         userAgent: data.solution.ua,
       },
       cost: data.cost,

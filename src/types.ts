@@ -99,6 +99,49 @@ export interface DatadomeSliderSolution {
   userAgent: string;
 }
 
+/** Cookies returned by CaptchaFox. */
+export interface CaptchaFoxCookies {
+  bmS: string;
+  bmSc: string;
+}
+
+/** Solution for CaptchaFox challenges. */
+export interface CaptchaFoxSolution {
+  cookie: CaptchaFoxCookies;
+  userAgent: string;
+}
+
+/** Solution for Castle challenges. */
+export interface CastleSolution {
+  token: string;
+  userAgent: string;
+}
+
+/** Solution for Incapsula Reese84 challenges. */
+export interface Reese84Solution {
+  reese84: string;
+  userAgent: string;
+}
+
+/** Solution for Forter challenges. */
+export interface ForterSolution {
+  token: string;
+  userAgent: string;
+}
+
+/** Solution for Funcaptcha challenges. */
+export interface FuncaptchaSolution {
+  token: string;
+  userAgent: string;
+}
+
+/** Solution for Akamai SBSD challenges. */
+export interface SBSDSolution {
+  bmS: string;
+  bmSc: string;
+  userAgent: string;
+}
+
 // ============================================================================
 // Request Types
 // ============================================================================
@@ -171,6 +214,57 @@ export interface DatadomeSliderRequest {
   proxy: string;
   targetUrl: string;
   targetMethod?: string;
+}
+
+/** Request for solving CaptchaFox challenges. */
+export interface CaptchaFoxRequest {
+  proxy: string;
+  targetUrl: string;
+  siteKey: string;
+}
+
+/** Castle configuration parameters. */
+export interface CastleConfigJSON {
+  avoidCookies?: boolean;
+  pk: string;
+  wUrl: string;
+  swUrl: string;
+}
+
+/** Request for solving Castle challenges. */
+export interface CastleRequest {
+  proxy: string;
+  targetUrl: string;
+  configJson: CastleConfigJSON;
+}
+
+/** Request for solving Incapsula Reese84 challenges. */
+export interface Reese84Request {
+  proxy: string;
+  reese84JsUrl: string;
+}
+
+/** Request for solving Forter challenges. */
+export interface ForterRequest {
+  proxy: string;
+  targetUrl: string;
+  forterJsUrl: string;
+  siteId: string;
+}
+
+/** Request for solving Funcaptcha challenges. */
+export interface FuncaptchaRequest {
+  proxy: string;
+  targetUrl: string;
+  customApiHost: string;
+  publicKey: string;
+}
+
+/** Request for solving Akamai SBSD challenges. */
+export interface SBSDRequest {
+  proxy: string;
+  targetUrl: string;
+  targetMethod: string;
 }
 
 // ============================================================================
