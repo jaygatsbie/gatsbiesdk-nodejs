@@ -62,6 +62,15 @@ export interface ShapeSolution {
   userAgent: string;
 }
 
+/**
+ * Solution for Shape v2 challenges.
+ * Returns headers and extra data from the TLS fingerprinting solver.
+ */
+export interface ShapeV2Solution {
+  headers: Record<string, string>;
+  extra?: Record<string, unknown>;
+}
+
 /** Solution for Cloudflare Turnstile challenges. */
 export interface TurnstileSolution {
   token: string;
@@ -185,6 +194,24 @@ export interface ShapeRequest {
   shapeJsUrl: string;
   title: string;
   method: string;
+}
+
+/** Request for solving Shape v2 challenges with TLS fingerprinting. */
+export interface ShapeV2Request {
+  /** Target page URL. */
+  url: string;
+  /** Proxy URL (required). */
+  proxy: string;
+  /** Site public key (optional). */
+  pkey?: string;
+  /** Shape script URL (optional). */
+  scriptUrl?: string;
+  /** Request parameters (optional). */
+  request?: Record<string, string>;
+  /** Country code for geo-location (optional). */
+  country?: string;
+  /** Timeout in seconds (optional). */
+  timeout?: number;
 }
 
 /** Request for solving Cloudflare Turnstile challenges. */

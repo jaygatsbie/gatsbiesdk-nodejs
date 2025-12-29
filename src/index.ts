@@ -44,6 +44,7 @@ export type {
   Reese84Solution,
   SBSDSolution,
   ShapeSolution,
+  ShapeV2Solution,
   TurnstileSolution,
   VercelSolution,
   // Request types
@@ -61,6 +62,7 @@ export type {
   Reese84Request,
   SBSDRequest,
   ShapeRequest,
+  ShapeV2Request,
   TurnstileRequest,
   VercelRequest,
   // Options

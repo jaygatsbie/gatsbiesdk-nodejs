@@ -28,6 +28,8 @@ import type {
   SBSDSolution,
   ShapeRequest,
   ShapeSolution,
+  ShapeV2Request,
+  ShapeV2Solution,
   SolveResponse,
   TurnstileRequest,
   TurnstileSolution,
@@ -288,7 +290,7 @@ export class Client {
   }
 
   /**
-   * Solve a Shape antibot challenge.
+   * Solve a Shape antibot challenge (v1).
    */
   async solveShape(
     request: ShapeRequest
@@ -322,6 +324,53 @@ export class Client {
       solution: {
         headers,
         userAgent: userAgent || "",
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve a Shape antibot challenge using the v2 API with TLS fingerprinting.
+   */
+  async solveShapeV2(
+    request: ShapeV2Request
+  ): Promise<SolveResponse<ShapeV2Solution>> {
+    const metadata: Record<string, unknown> = {
+      proxy: request.proxy,
+    };
+    if (request.pkey) metadata.pkey = request.pkey;
+    if (request.scriptUrl) metadata.script_url = request.scriptUrl;
+    if (request.request) metadata.request = request.request;
+    if (request.country) metadata.country = request.country;
+    if (request.timeout) metadata.timeout = request.timeout;
+
+    const body = {
+      url: request.url,
+      metadata,
+    };
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: {
+        headers?: Record<string, string>;
+        [key: string]: unknown;
+      };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/shape-v2", body);
+
+    const { headers = {}, ...extra } = data.solution;
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        headers,
+        extra: Object.keys(extra).length > 0 ? extra : undefined,
       },
       cost: data.cost,
       solveTime: data.solveTime,
