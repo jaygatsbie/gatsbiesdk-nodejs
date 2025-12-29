@@ -27,10 +27,9 @@ export interface DatadomeSolution {
   userAgent: string;
 }
 
-/** Solution for reCAPTCHA v3 challenges. */
-export interface RecaptchaV3Solution {
+/** Solution for reCAPTCHA challenges. */
+export interface RecaptchaSolution {
   token: string;
-  userAgent: string;
 }
 
 /** Cookies returned by Akamai. */
@@ -162,14 +161,27 @@ export interface DatadomeRequest {
   targetMethod?: string;
 }
 
-/** Request for solving reCAPTCHA v3 challenges. */
-export interface RecaptchaV3Request {
+/** Request for solving reCAPTCHA v2/v3 (Universal) challenges. */
+export interface RecaptchaRequest {
   proxy: string;
   targetUrl: string;
   siteKey: string;
+  size: string;
+  title: string;
   action?: string;
-  title?: string;
-  enterprise?: boolean;
+  ubd?: boolean;
+}
+
+/** Request for solving reCAPTCHA Enterprise challenges. */
+export interface RecaptchaEnterpriseRequest {
+  proxy: string;
+  targetUrl: string;
+  siteKey: string;
+  size: string;
+  title: string;
+  action?: string;
+  ubd?: boolean;
+  sa?: string;
 }
 
 /** Request for solving Akamai challenges. */

@@ -20,8 +20,9 @@ import type {
   HealthResponse,
   PerimeterXRequest,
   PerimeterXSolution,
-  RecaptchaV3Request,
-  RecaptchaV3Solution,
+  RecaptchaRequest,
+  RecaptchaEnterpriseRequest,
+  RecaptchaSolution,
   Reese84Request,
   Reese84Solution,
   SBSDRequest,
@@ -169,29 +170,30 @@ export class Client {
   }
 
   /**
-   * Solve a reCAPTCHA v3 challenge.
+   * Solve a reCAPTCHA v2/v3 (Universal) challenge.
    */
-  async solveRecaptchaV3(
-    request: RecaptchaV3Request
-  ): Promise<SolveResponse<RecaptchaV3Solution>> {
+  async solveRecaptcha(
+    request: RecaptchaRequest
+  ): Promise<SolveResponse<RecaptchaSolution>> {
     const body: Record<string, unknown> = {
-      task_type: "recaptchav3",
+      task_type: "recaptcha",
       proxy: request.proxy,
       target_url: request.targetUrl,
       site_key: request.siteKey,
+      size: request.size,
+      title: request.title,
     };
     if (request.action) body.action = request.action;
-    if (request.title) body.title = request.title;
-    if (request.enterprise) body.enterprise = request.enterprise;
+    if (request.ubd) body.ubd = request.ubd;
 
     const data = await this.request<{
       success: boolean;
       taskId: string;
       service: string;
-      solution: { token: string; ua: string };
+      solution: { token: string };
       cost: number;
       solveTime: number;
-    }>("POST", "/v1/solve/recaptchav3", body);
+    }>("POST", "/v1/solve/recaptcha", body);
 
     return {
       success: data.success,
@@ -199,7 +201,45 @@ export class Client {
       service: data.service,
       solution: {
         token: data.solution.token,
-        userAgent: data.solution.ua,
+      },
+      cost: data.cost,
+      solveTime: data.solveTime,
+    };
+  }
+
+  /**
+   * Solve a reCAPTCHA Enterprise challenge.
+   */
+  async solveRecaptchaEnterprise(
+    request: RecaptchaEnterpriseRequest
+  ): Promise<SolveResponse<RecaptchaSolution>> {
+    const body: Record<string, unknown> = {
+      task_type: "recaptcha_enterprise",
+      proxy: request.proxy,
+      target_url: request.targetUrl,
+      site_key: request.siteKey,
+      size: request.size,
+      title: request.title,
+    };
+    if (request.action) body.action = request.action;
+    if (request.ubd) body.ubd = request.ubd;
+    if (request.sa) body.sa = request.sa;
+
+    const data = await this.request<{
+      success: boolean;
+      taskId: string;
+      service: string;
+      solution: { token: string };
+      cost: number;
+      solveTime: number;
+    }>("POST", "/v1/solve/recaptcha-enterprise", body);
+
+    return {
+      success: data.success,
+      taskId: data.taskId,
+      service: data.service,
+      solution: {
+        token: data.solution.token,
       },
       cost: data.cost,
       solveTime: data.solveTime,
