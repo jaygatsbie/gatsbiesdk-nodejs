@@ -1,6 +1,6 @@
 {
   "name": "gatsbie",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Official Node.js SDK for the Gatsbie Captcha API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,6 +9,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./target": {
+      "types": "./dist/target/index.d.ts",
+      "import": "./dist/target/index.mjs",
+      "require": "./dist/target/index.js"
     }
   },
   "files": [
@@ -28,7 +33,8 @@
     "recaptcha",
     "cloudflare",
     "perimeterx",
-    "vercel"
+    "vercel",
+    "target"
   ],
   "author": "Gatsbie <support@gatsbie.io>",
   "license": "MIT",
