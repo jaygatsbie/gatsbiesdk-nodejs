@@ -25,17 +25,6 @@ const response = await client.solveTurnstile({
 console.log(response.solution.token);
 ```
 
-## Supported Captcha Types
-
-- **Datadome** - Device check and slider
-- **reCAPTCHA v3** - Including enterprise
-- **Akamai** - Bot management
-- **Vercel** - Bot protection
-- **Shape** - Antibot
-- **Cloudflare Turnstile** - Turnstile challenges
-- **Cloudflare WAF** - WAF challenges
-- **PerimeterX** - Invisible challenges
-
 ## Error Handling
 
 ```typescript
